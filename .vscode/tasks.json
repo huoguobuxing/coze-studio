@@ -1,0 +1,160 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start Coze Studio Dependencies",
+      "type": "shell",
+      "command": "docker",
+      "args": [
+        "compose",
+        "-f",
+        "docker/docker-compose-debug.yml",
+        "--env-file",
+        "docker/.env.debug",
+        "--profile",
+        "middleware",
+        "up",
+        "-d"
+      ],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Start All Coze Studio Services",
+      "type": "shell",
+      "command": "docker",
+      "args": [
+        "compose",
+        "-f",
+        "docker/docker-compose-debug.yml",
+        "--env-file",
+        "docker/.env.debug",
+        "up",
+        "-d"
+      ],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Stop Coze Studio Services",
+      "type": "shell",
+      "command": "docker",
+      "args": [
+        "compose",
+        "-f",
+        "docker/docker-compose-debug.yml",
+        "--env-file",
+        "docker/.env.debug",
+        "down"
+      ],
+      "group": "clean",
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Start Coze Studio Frontend Dev Server",
+      "type": "shell",
+      "command": "rushx",
+      "args": [
+        "dev"
+      ],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}/frontend/apps/coze-studio"
+      },
+      "problemMatcher": [],
+      "isBackground": true,
+      "dependsOn": "Start Coze Studio Dependencies"
+    },
+    {
+      "label": "Build Backend",
+      "type": "shell",
+      "command": "go",
+      "args": [
+        "build",
+        "-o",
+        "bin/opencoze",
+        "main.go"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/backend"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": [
+        "$go"
+      ]
+    },
+    {
+      "label": "Build Backend with Debug Info",
+      "type": "shell",
+      "command": "go",
+      "args": [
+        "build",
+        "-gcflags",
+        "all=-N -l",
+        "-o",
+        "bin/opencoze",
+        "main.go"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/backend"
+      },
+      "group": "build",
+      "problemMatcher": [
+        "$go"
+      ]
+    },
+    {
+      "label": "Run Backend Tests",
+      "type": "shell",
+      "command": "go",
+      "args": [
+        "test",
+        "-v",
+        "./..."
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/backend"
+      },
+      "group": "test",
+      "problemMatcher": [
+        "$go"
+      ]
+    }
+  ]
+}
